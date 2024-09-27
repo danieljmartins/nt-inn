@@ -1,0 +1,62 @@
+server:
+  port: ${PORT:8081}
+
+spring:
+
+  main:
+    allow-bean-definition-overriding: true
+
+  application:
+    name: reserva_api
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    #url: jdbc:postgresql://localhost:5433/reserva_db
+    #username: admin
+    #password: 123456
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5433}/${DB_NAME:reserva_db}
+    username: ${DB_USER:admin}
+    password: ${DB_PASSWORD:123456}
+    initialization-mode: always
+    initialize: true
+    continue-on-error: true
+    platform: postgresql
+    maxActive: 3
+
+  jpa:
+    hibernate:
+      #ddl-auto: update
+      ddl-auto: create-drop
+      format_sql: true
+    show_sql: true
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ntinnemail@gmail.com
+    password: Nt@123456789
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+app-config:
+  rabbit:
+    exchange:
+      reserva: reserva.topic
+
+    routingKey:
+      confirmacao-reserva: confirmacao-reserva.routingKey
+
+    queue:
+      confirmacao-hotel: confirmacao-hotel.queue
+
+logging:
+  level:
+    org.springframework.mail: DEBUG
+
+sendgrid:
+  api-key: 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
+  sender-email: ntinnemail@gmail.com

@@ -1,0 +1,53 @@
+# comando pra rodar: docker-compose up --build
+services:
+  hotel_db:
+    image: postgres:11
+    container_name: hotel_db
+    restart: always
+    environment: 
+      - POSTGRES_DB=hotel_db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=123456
+    ports:
+      - 5432:5432
+
+  reserva_db:
+    image: postgres:11
+    container_name: reserva_db
+    restart: always
+    environment: 
+      - POSTGRES_DB=reserva_db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=123456
+    ports:
+      - 5433:5432  
+
+  hotel_api:
+    build: './hotel_api'
+    container_name: hotel-api
+    depends_on:
+      - hotel_db
+    environment:
+      - PORT=8080
+      - DB_HOST=hotel_db
+      - DB_NAME=hotel_db
+      - DB_USER=admin
+      - DB_PASSWORD=123456
+      - DB_PORT=5432
+    ports:
+      - 8080:8080
+
+  reserva_api:
+    build: './reserva_api'
+    container_name: reserva-api
+    depends_on:
+      - reserva_db
+    environment:
+      - PORT=8081
+      - DB_HOST=reserva_db
+      - DB_NAME=reserva_db
+      - DB_USER=admin
+      - DB_PASSWORD=123456
+      - DB_PORT=5432
+    ports:
+      - 8081:8081
